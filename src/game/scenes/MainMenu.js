@@ -26,12 +26,6 @@ export class MainMenu extends Scene
 
     changeScene ()
     {
-        if (this.logoTween)
-        {
-            this.logoTween.stop();
-            this.logoTween = null;
-        }
-
         this.scene.start('Game');
     }
 
