@@ -33,6 +33,7 @@ export class Preloader extends Scene
         this.load.setPath('assets');
 
         this.load.image('girl', 'girl-front.PNG');
+        this.load.image('zombie', 'zombie.PNG');
     }
 
     create ()

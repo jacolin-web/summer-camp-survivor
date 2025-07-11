@@ -5,42 +5,34 @@ import { PhaserGame } from './PhaserGame';
 
 function App ()
 {
-    // The sprite can only be moved in the MainMenu Scene
-    const [canMoveSprite, setCanMoveSprite] = useState(true);
     const [showStart, setShowStart] = useState(true);
+
+    function callRandom(scene){
+        return Phaser.Math.Between(64, scene.scale.width - 64)
+    }
     
     //  References to the PhaserGame component (game and scene are exposed)
     const phaserRef = useRef();
-    const [spritePosition, setSpritePosition] = useState({ x: 0, y: 0 });
-
-
-    const moveSprite = () => {
-
-        const scene = phaserRef.current.scene;
-
-        if (scene && scene.scene.key === 'MainMenu')
-        {
-            // Get the update logo position
-            scene.moveLogo(({ x, y }) => {
-
-                setSpritePosition({ x, y });
-
-            });
-        }
-    }
 
     const startGame = () => {
         const scene = phaserRef.current.scene;
 
         if (scene) {
-            const x = Phaser.Math.Between(64, scene.scale.width - 64);
-            const y = Phaser.Math.Between(64, scene.scale.height - 64);
+            const girlX = callRandom(scene)
+            const girlY = callRandom(scene)
 
-            // Add sprite with physics enabled
-            const girl = scene.add.sprite(x, y, 'girl');
+            // Add girl scout sprite
+            const girl = scene.add.sprite(girlX, girlY, 'girl');
 
             // Enable input for the sprite
             girl.setInteractive();
+
+
+            const zombieX = callRandom(scene)
+            const zombieY = callRandom(scene)
+
+            // Add girl scout sprite
+            const zombie = scene.add.sprite(zombieX, zombieY, 'zombie');
 
             scene.input.on('pointerdown', function (pointer) {
                 scene.tweens.add({
@@ -50,9 +42,19 @@ function App ()
                     duration: 1000,           // slower movement (1 second)
                     ease: 'Sine.easeInOut' 
                 });
+
+                scene.tweens.add({
+                targets: zombie,
+                x: pointer.x,
+                y: pointer.y,
+                duration: 1200, // a little slower for trailing effect
+                ease: 'Sine.easeInOut',
+                delay: 2000       // optional delay to look like it’s following
+            });
             });
 
             setShowStart(false);
+
         }
     };
     
