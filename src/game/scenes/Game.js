@@ -9,32 +9,49 @@ export class Game extends Scene
         super('Game');
     }
 
+    moveTo(sprite, targetX, targetY, speed) {
+        const angle = Phaser.Math.Angle.Between(sprite.x, sprite.y, targetX, targetY);
+
+        sprite.body.setVelocity(
+            Math.cos(angle) * speed,
+            Math.sin(angle) * speed
+
+        );
+
+        const stopDistance = 4;
+        const check = this.time.addEvent({
+            delay: 20,
+            callback: () => {
+                const distance = Phaser.Math.Distance.Between(sprite.x, sprite.y, targetX, targetY);
+                if (distance < stopDistance) {
+                    sprite.body.setVelocity(0, 0);
+                    check.remove(); // Stop checking once we've arrived
+                }
+            },
+            loop: true
+        });
+    }
+
     create() {
 
         const spawnX = Phaser.Math.Between(64, this.scale.width - 64);
         const spawnY = Phaser.Math.Between(64, this.scale.height - 64);
 
-        this.girl = this.add.sprite(spawnX, spawnY, 'girl').setInteractive();
-        this.boy = this.add.sprite(spawnX + 50, spawnY, 'boy');
+        this.girl = this.physics.add.sprite(spawnX, spawnY, 'girl').setInteractive();
+        this.boy = this.physics.add.sprite(spawnX + 50, spawnY, 'boy');
 
         this.zombie = this.add.sprite(spawnX, spawnY, 'zombie');
+        this.tree = this.physics.add.staticImage(300, 200, 'tree').refreshBody();
+        this.physics.add.collider(this.girl, this.tree);
+        this.physics.add.collider(this.boy, this.tree);
+
+        
 
         this.input.on('pointerdown', (pointer) => {
-            this.tweens.add({
-                targets: this.girl,
-                x: pointer.x,
-                y: pointer.y,
-                duration: 1000,
-                ease: 'Sine.easeInOut'
-            });
+            this.moveTo(this.girl, pointer.x, pointer.y, 150);
 
-            this.tweens.add({
-                targets: this.boy,
-                x: pointer.x + 50,
-                y: pointer.y,
-                duration: 1200, // a little slower for trailing effect
-                ease: 'Sine.easeInOut',
-                delay: 200 
+            this.time.delayedCall(200, () => {
+                this.moveTo(this.boy, pointer.x + 50, pointer.y, 120);
             });
         });
     }

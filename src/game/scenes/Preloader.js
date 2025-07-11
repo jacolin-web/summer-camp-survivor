@@ -31,7 +31,7 @@ export class Preloader extends Scene
     {
         //  Load the assets for the game - Replace with your own assets
         this.load.setPath('assets');
-
+        this.load.image('tree', 'tree.PNG');
         this.load.image('girl', 'girl-front.PNG');
         this.load.image('zombie', 'zombie.PNG');
         this.load.image('boy', 'boy-front.PNG');
