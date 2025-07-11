@@ -12,15 +12,6 @@ function App ()
     const phaserRef = useRef();
     const [spritePosition, setSpritePosition] = useState({ x: 0, y: 0 });
 
-    const changeScene = () => {
-
-        const scene = phaserRef.current.scene;
-
-        if (scene)
-        {
-            scene.changeScene();
-        }
-    }
 
     const moveSprite = () => {
 
@@ -37,8 +28,7 @@ function App ()
         }
     }
 
-    const addSprite = () => {
-
+    const startGame = () => {
         const scene = phaserRef.current.scene;
 
         if (scene)
@@ -48,35 +38,24 @@ function App ()
             const y = Phaser.Math.Between(64, scene.scale.height - 64);
 
             //  `add.sprite` is a Phaser GameObjectFactory method and it returns a Sprite Game Object instance
-            const star = scene.add.sprite(x, y, 'star');
+            const girl = scene.add.sprite(x, y, 'girl');
 
             //  ... which you can then act upon. Here we create a Phaser Tween to fade the star sprite in and out.
             //  You could, of course, do this from within the Phaser Scene code, but this is just an example
             //  showing that Phaser objects and systems can be acted upon from outside of Phaser itself.
             scene.add.tween({
-                targets: star,
+                targets: girl,
                 duration: 500 + Math.random() * 1000,
                 alpha: 0,
                 yoyo: true,
-                repeat: -1
             });
         }
     }
 
-    // Event emitted from the PhaserGame component
-    const currentScene = (scene) => {
-
-        setCanMoveSprite(scene.scene.key !== 'MainMenu');
-        
-    }
-
     return (
         <div id="app">
-            <PhaserGame ref={phaserRef} currentActiveScene={currentScene} />
+            <PhaserGame ref={phaserRef} />
             <div>
-                <div>
-                    <button className="button" onClick={changeScene}>Change Scene</button>
-                </div>
                 <div>
                     <button disabled={canMoveSprite} className="button" onClick={moveSprite}>Toggle Movement</button>
                 </div>
@@ -84,7 +63,7 @@ function App ()
                     <pre>{`{\n  x: ${spritePosition.x}\n  y: ${spritePosition.y}\n}`}</pre>
                 </div>
                 <div>
-                    <button className="button" onClick={addSprite}>Add New Sprite</button>
+                    <button className="button" onClick={startGame} >Start Game</button>
                 </div>
             </div>
         </div>
