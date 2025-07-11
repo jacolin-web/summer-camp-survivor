@@ -7,6 +7,7 @@ function App ()
 {
     // The sprite can only be moved in the MainMenu Scene
     const [canMoveSprite, setCanMoveSprite] = useState(true);
+    const [showStart, setShowStart] = useState(true);
     
     //  References to the PhaserGame component (game and scene are exposed)
     const phaserRef = useRef();
@@ -36,45 +37,29 @@ function App ()
             const y = Phaser.Math.Between(64, scene.scale.height - 64);
 
             // Add sprite with physics enabled
-            const girl = scene.physics.add.sprite(x, y, 'girl');
+            const girl = scene.add.sprite(x, y, 'girl');
 
             // Enable input for the sprite
             girl.setInteractive();
 
-            // Optional: set physics properties like bounce, drag, etc.
-            girl.setBounce(0.5);
-            girl.setCollideWorldBounds(true);
-
-            // Listen for pointerdown (click) on the scene, not just on the sprite
             scene.input.on('pointerdown', function (pointer) {
-                // Calculate angle to pointer
-                const angle = Phaser.Math.Angle.Between(girl.x, girl.y, pointer.x, pointer.y);
-
-                // Calculate velocity components
-                const speed = 200; // pixels/second
-                const velocityX = Math.cos(angle) * speed;
-                const velocityY = Math.sin(angle) * speed;
-
-                // Apply velocity to the sprite
-                girl.setVelocity(velocityX, velocityY);
+                scene.tweens.add({
+                    targets: girl,
+                    x: pointer.x,
+                    y: pointer.y,
+                    duration: 1000,           // slower movement (1 second)
+                    ease: 'Sine.easeInOut' 
+                });
             });
+
+            setShowStart(false);
         }
     };
     
     return (
         <div id="app">
             <PhaserGame ref={phaserRef} />
-            <div>
-                <div>
-                    <button disabled={canMoveSprite} className="button" onClick={moveSprite}>Toggle Movement</button>
-                </div>
-                <div className="spritePosition">Sprite Position:
-                    <pre>{`{\n  x: ${spritePosition.x}\n  y: ${spritePosition.y}\n}`}</pre>
-                </div>
-                <div>
-                    <button className="button" onClick={startGame} >Start Game</button>
-                </div>
-            </div>
+            <button hidden={!showStart} className="button" onClick={startGame} >Start Game</button>
         </div>
     )
 }
