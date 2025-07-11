@@ -31,27 +31,36 @@ function App ()
     const startGame = () => {
         const scene = phaserRef.current.scene;
 
-        if (scene)
-        {
-            // Add more stars
+        if (scene) {
             const x = Phaser.Math.Between(64, scene.scale.width - 64);
             const y = Phaser.Math.Between(64, scene.scale.height - 64);
 
-            //  `add.sprite` is a Phaser GameObjectFactory method and it returns a Sprite Game Object instance
-            const girl = scene.add.sprite(x, y, 'girl');
+            // Add sprite with physics enabled
+            const girl = scene.physics.add.sprite(x, y, 'girl');
 
-            //  ... which you can then act upon. Here we create a Phaser Tween to fade the star sprite in and out.
-            //  You could, of course, do this from within the Phaser Scene code, but this is just an example
-            //  showing that Phaser objects and systems can be acted upon from outside of Phaser itself.
-            scene.add.tween({
-                targets: girl,
-                duration: 500 + Math.random() * 1000,
-                alpha: 0,
-                yoyo: true,
+            // Enable input for the sprite
+            girl.setInteractive();
+
+            // Optional: set physics properties like bounce, drag, etc.
+            girl.setBounce(0.5);
+            girl.setCollideWorldBounds(true);
+
+            // Listen for pointerdown (click) on the scene, not just on the sprite
+            scene.input.on('pointerdown', function (pointer) {
+                // Calculate angle to pointer
+                const angle = Phaser.Math.Angle.Between(girl.x, girl.y, pointer.x, pointer.y);
+
+                // Calculate velocity components
+                const speed = 200; // pixels/second
+                const velocityX = Math.cos(angle) * speed;
+                const velocityY = Math.sin(angle) * speed;
+
+                // Apply velocity to the sprite
+                girl.setVelocity(velocityX, velocityY);
             });
         }
-    }
-
+    };
+    
     return (
         <div id="app">
             <PhaserGame ref={phaserRef} />
