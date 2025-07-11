@@ -38,10 +38,16 @@ export class Game extends Scene
         const spawnY = Phaser.Math.Between(64, this.scale.height - 64);
 
         this.girl = this.physics.add.sprite(spawnX, spawnY, 'girl').setInteractive();
-        this.boy = this.physics.add.sprite(spawnX + 50, spawnY, 'boy');
+        this.girl.body.setSize(65,100);
+
+        this.boy = this.physics.add.sprite(spawnX + 50, spawnY, 'boy').setScale(0.85);
+        this.boy.body.setSize(65,100);
 
         this.zombie = this.add.sprite(spawnX, spawnY, 'zombie');
-        this.tree = this.physics.add.staticImage(300, 200, 'tree').refreshBody();
+
+        this.tree = this.physics.add.staticImage(300, 200, 'tree').setScale(1.5).refreshBody();
+        this.tree.body.setSize(90,100);
+
         this.physics.add.collider(this.girl, this.tree);
         this.physics.add.collider(this.boy, this.tree);
 
