@@ -34,6 +34,7 @@ export class Preloader extends Scene
 
         this.load.image('girl', 'girl-front.PNG');
         this.load.image('zombie', 'zombie.PNG');
+        this.load.image('boy', 'boy-front.PNG');
     }
 
     create ()

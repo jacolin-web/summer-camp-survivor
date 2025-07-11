@@ -12,7 +12,7 @@ export class MainMenu extends Scene
 
     create ()
     {
-        this.add.image(512, 384, 'background');
+        this.add.image(512, 384, 'grass');
 
 
         this.add.text(512, 460, 'Welcome to Summer Camp', {

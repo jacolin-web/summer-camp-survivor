@@ -18,21 +18,17 @@ function App ()
         const scene = phaserRef.current.scene;
 
         if (scene) {
-            const girlX = callRandom(scene)
-            const girlY = callRandom(scene)
+            const spawnX = callRandom(scene)
+            const spawnY = callRandom(scene)
 
             // Add girl scout sprite
-            const girl = scene.add.sprite(girlX, girlY, 'girl');
+            const girl = scene.add.sprite(spawnX, spawnY, 'girl');
 
             // Enable input for the sprite
             girl.setInteractive();
 
-
-            const zombieX = callRandom(scene)
-            const zombieY = callRandom(scene)
-
             // Add girl scout sprite
-            const zombie = scene.add.sprite(zombieX, zombieY, 'zombie');
+            const boy = scene.add.sprite(spawnX + 50, spawnY, 'boy');
 
             scene.input.on('pointerdown', function (pointer) {
                 scene.tweens.add({
@@ -44,12 +40,12 @@ function App ()
                 });
 
                 scene.tweens.add({
-                targets: zombie,
-                x: pointer.x,
+                targets: boy,
+                x: pointer.x + 50,
                 y: pointer.y,
                 duration: 1200, // a little slower for trailing effect
                 ease: 'Sine.easeInOut',
-                delay: 2000       // optional delay to look like it’s following
+                delay: 100       // optional delay to look like it’s following
             });
             });
 
