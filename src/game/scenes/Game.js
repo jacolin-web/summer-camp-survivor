@@ -1,5 +1,6 @@
 import { EventBus } from '../EventBus';
 import { Scene } from 'phaser';
+import Phaser from 'phaser';
 
 export class Game extends Scene
 {
@@ -16,23 +17,35 @@ export class Game extends Scene
         this.girl = this.add.sprite(spawnX, spawnY, 'girl').setInteractive();
         this.boy = this.add.sprite(spawnX + 50, spawnY, 'boy');
 
+        this.zombie = this.add.sprite(spawnX, spawnY, 'zombie');
+
         this.input.on('pointerdown', (pointer) => {
-        this.tweens.add({
-            targets: this.girl,
-            x: pointer.x,
-            y: pointer.y,
-            duration: 1000,
-            ease: 'Sine.easeInOut'
-        });
+            this.tweens.add({
+                targets: this.girl,
+                x: pointer.x,
+                y: pointer.y,
+                duration: 1000,
+                ease: 'Sine.easeInOut'
+            });
+
+            this.tweens.add({
+                targets: this.boy,
+                x: pointer.x + 50,
+                y: pointer.y,
+                duration: 1200, // a little slower for trailing effect
+                ease: 'Sine.easeInOut',
+                delay: 200 
+            });
         });
     }
 
-    // update() {
-    //     if (this.girl && this.boy) {
-    //     const speed = 1.5;
-    //     Phaser.Math.MoveToObject(this.boy, this.girl, speed);
-    //     }
-    // }
+    update(time, delta) {
+        if (this.girl && this.zombie) {
+            // Move the enemy a few pixels per frame toward the girl
+            const speed = 1.2; // Adjust to make it faster/slower
+            // Phaser.Math.MoveToObject(this.zombie, this.girl, speed);
+        }
+    }
 
     changeScene ()
     {

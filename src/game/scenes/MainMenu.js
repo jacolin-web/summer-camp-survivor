@@ -14,12 +14,11 @@ export class MainMenu extends Scene
     {
         this.add.image(512, 384, 'grass');
 
-
-        this.add.text(512, 460, 'Welcome to Summer Camp', {
+        this.add.text(512, 460, 'This is the title', {
             fontFamily: 'Arial Black', fontSize: 38, color: '#ffffff',
             stroke: '#000000', strokeThickness: 8,
             align: 'left'
-        }).setDepth(100).setOrigin(0.8);
+        }).setDepth(100).setOrigin(0.5);
         
         EventBus.emit('current-scene-ready', this);
     }
