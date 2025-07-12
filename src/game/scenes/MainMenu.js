@@ -10,9 +10,13 @@ export class MainMenu extends Scene
         super('MainMenu');
     }
 
+    preloader(){
+        this.load.image('tent', 'assets/tent-start.PNG');
+    }
+
     create ()
     {
-        this.add.image(512, 384, 'grass');
+        this.add.image(512, 384, 'tent');
 
         this.add.text(512, 460, 'This is the title', {
             fontFamily: 'Arial Black', fontSize: 38, color: '#ffffff',
