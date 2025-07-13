@@ -12,7 +12,17 @@ function App ()
     const mainMenu = phaserRef.current?.scene; // this is MainMenu scene
 
     if (mainMenu && mainMenu.scene.key === 'MainMenu') {
-      mainMenu.scene.start('Game');
+      mainMenu.scene.launch('DialogueScene', {
+        lines: [
+          'Welcome to the forest.',
+          'Avoid the zombie if you can.',
+          'Click to move around!'
+        ],
+        onComplete: () => {
+          mainMenu.scene.start('Game'); // start game AFTER dialogue
+          setStarted(true);             // hide start button
+        }
+      });
       setStarted(true);
     }
   };
@@ -20,11 +30,6 @@ function App ()
   return (
     <div id="app">
       <PhaserGame ref={phaserRef} />
-      {!started && (
-        <button className="button" onClick={startGame}>
-          Start Game
-        </button>
-      )}
     </div>
   );
 }
