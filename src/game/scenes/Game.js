@@ -74,6 +74,12 @@ export class Game extends Scene
 
         this.zombie = this.physics.add.sprite(randomSpawnX, randomSpawnY, 'zombie');
         this.zombie.body.setSize(65,100);
+
+        this.camper1 = this.physics.add.sprite(300, 300, 'egg-south').setScale(0.85);
+        this.camper1.body.setSize(65,100);
+
+        this.camper2 = this.physics.add.sprite(300, 350, 'boohoo-south').setScale(0.85);
+        this.camper2.body.setSize(65,100);
         
         this.trees = this.physics.add.staticGroup();
         const treeCount = Phaser.Math.Between(10, 13);
