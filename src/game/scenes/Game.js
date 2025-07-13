@@ -78,7 +78,7 @@ export class Game extends Scene
         this.campers = this.physics.add.group();
 
         this.girl = this.physics.add.sprite(spawnX, spawnY, 'girl-south').setInteractive();
-        this.girl.body.setSize(30,50);
+        this.girl.body.setSize(65,100);
 
         this.boy = this.physics.add.sprite(spawnX + 50, spawnY, 'boy-south').setScale(0.85);
         this.boy.body.setSize(20,40);
