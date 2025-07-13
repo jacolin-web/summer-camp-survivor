@@ -4,6 +4,7 @@ import { GameOver } from './scenes/GameOver';
 import { MainMenu } from './scenes/MainMenu';
 import Phaser from 'phaser';
 import { Preloader } from './scenes/Preloader';
+import { DialogueScene } from './scenes/DialogueScene';
 
 // Find out more information about the Game Config at:
 // https://docs.phaser.io/api-documentation/typedef/types-core#gameconfig
@@ -22,6 +23,7 @@ const config = {
       },
     scene: [
         Boot,
+        DialogueScene,
         Preloader,
         MainMenu,
         Game,
