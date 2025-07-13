@@ -63,6 +63,7 @@ export class Game extends Scene
     }
 
     create() {
+        //Setting up initial scene
         this.add.image(512, 384, 'tent');
 
         //Starting and endpoint of tent
