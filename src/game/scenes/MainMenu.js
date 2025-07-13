@@ -11,14 +11,14 @@ export class MainMenu extends Scene
     }
 
     preloader(){
-        this.load.image('tent', 'assets/tent-start.PNG');
+        this.load.image('tent', 'assets/main-menu.PNG');
     }
 
     create ()
     {
         this.add.image(512, 384, 'tent');
 
-        this.add.text(512, 460, 'This is the title', {
+        this.add.text(512, 460, 'Summer Camp Survival', {
             fontFamily: 'Arial Black', fontSize: 38, color: '#ffffff',
             stroke: '#000000', strokeThickness: 8,
             align: 'left'
