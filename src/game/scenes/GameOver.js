@@ -1,43 +1,36 @@
-import { EventBus } from '../EventBus';
-import { Scene } from 'phaser';
-
-export class GameOver extends Scene
-{
-    constructor ()
-    {
+export class GameOver extends Phaser.Scene {
+    constructor() {
         super('GameOver');
     }
 
-    create ()
-    {
-        this.cameras.main.setBackgroundColor(0xff0000);
+    init(data) {
+        this.result = data.result || 'lose';
+    }
 
-        this.add.image(512, 384, 'grass').setAlpha(0.5);
+    preload(){
+        this.load.image('gameover', 'assets/main-menu.PNG');
+    }
 
-        this.add.text(512, 384, 'Game Over', {
-            fontFamily: 'Arial Black', fontSize: 64, color: '#ffffff',
-            stroke: '#000000', strokeThickness: 8,
-            align: 'center'
-        }).setOrigin(0.5).setDepth(100);
+    create() {
+        this.add.image(512, 384, 'gameover');
 
-        const restartButton = this.add.text(this.scale.width / 2, 450, 'Restart Game', {
-            fontSize: '32px',
+        const message = this.result === 'win' ? 'You Win!' : 'Game Over';
+        const color = this.result === 'win' ? '#88ff88' : '#ff4444';
+
+        this.add.text(this.scale.width / 2, this.scale.height / 2, message, {
+            fontSize: '48px',
+            color: color
+        }).setOrigin(0.5);
+
+        const restartBtn = this.add.text(this.scale.width / 2, this.scale.height / 2 + 100, 'Play Again', {
+            fontSize: '28px',
             color: '#ffffff',
             backgroundColor: '#000000',
             padding: { x: 20, y: 10 }
-        })
-        .setOrigin(0.5)
-        .setInteractive({ useHandCursor: true });
+        }).setOrigin(0.5).setInteractive();
 
-        restartButton.on('pointerdown', () => {
-            this.scene.start('Game');
+        restartBtn.on('pointerdown', () => {
+            this.scene.start('MainMenu'); // or 'Game' if you want to restart directly
         });
-
-        EventBus.emit('current-scene-ready', this);
-    }
-
-    changeScene ()
-    {
-        this.scene.start('MainMenu');
     }
 }

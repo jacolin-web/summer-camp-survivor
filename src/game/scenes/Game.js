@@ -65,22 +65,25 @@ export class Game extends Scene
     create() {
         this.add.image(512, 384, 'tent');
 
-        //Characters spawn here
-        const spawnX = 750;
-        const spawnY = 350;
+        //Starting and endpoint of tent
+        this.spawnX = 750;
+        this.spawnY = 350;
+        //Game mechanics
+        this.campersTotal = 2; 
+        this.hasWon = false;
+
         const minDistanceFromSpawn = 250;
 
         const randomSpawnX = Phaser.Math.Between(64, this.scale.width - 64);
         const randomSpawnY = Phaser.Math.Between(64, this.scale.height - 64);
-        
 
         this.followers = [];
         this.campers = this.physics.add.group();
 
-        this.girl = this.physics.add.sprite(spawnX, spawnY, 'girl-south').setInteractive();
+        this.girl = this.physics.add.sprite(this.spawnX, this.spawnY, 'girl-south').setInteractive();
         this.girl.body.setSize(65,100);
 
-        this.boy = this.physics.add.sprite(spawnX + 50, spawnY, 'boy-south').setScale(0.85);
+        this.boy = this.physics.add.sprite(this.spawnX + 50, this.spawnY, 'boy-south').setScale(0.85);
         this.boy.body.setSize(20,40);
 
         this.zombie = this.physics.add.sprite(randomSpawnX, randomSpawnY, 'zombie-east');
@@ -90,7 +93,7 @@ export class Game extends Scene
         this.boss.body.setSize(20,40);
 
         this.physics.add.overlap(this.girl, this.zombie, () => {
-            this.changeScene();
+            this.changeScene('lose');
         });
 
         this.camper1 = this.physics.add.sprite(300, 300, 'egg-south').setScale(0.85);
@@ -103,6 +106,7 @@ export class Game extends Scene
 
         this.physics.add.overlap(this.girl, this.campers, this.collectCamper, null, this);
         
+        // Set up trees dynamically
         this.trees = this.physics.add.staticGroup();
         const treeCount = Phaser.Math.Between(10, 13);
         const minDistanceBetweenTrees = 200;
@@ -120,7 +124,7 @@ export class Game extends Scene
                 attempts++;
 
                 // 1. Too close to the spawn point?
-                const farFromSpawn = Phaser.Math.Distance.Between(x, y, spawnX, spawnY) > minDistanceFromSpawn;
+                const farFromSpawn = Phaser.Math.Distance.Between(x, y, this.spawnX, this.spawnY) > minDistanceFromSpawn;
 
                 // 2. Too close to other trees?
                 const farFromOtherTrees = placedTreePositions.every(pos => {
@@ -142,7 +146,7 @@ export class Game extends Scene
         this.physics.add.collider(this.girl, this.trees);
         this.physics.add.collider(this.boy, this.trees);
 
-
+        // Handle click down 
         this.input.on('pointerdown', (pointer) => {
             const dx = pointer.x - this.girl.x;
             const dy = pointer.y - this.girl.y;
@@ -150,28 +154,20 @@ export class Game extends Scene
             this.setDirectionTexture(this.girl, dx, dy, 'girl');
             this.moveTo(this.girl, pointer.x, pointer.y, 200);
 
-            console.log(`current position x: ${pointer.x}`);
-            console.log(`current position y: ${pointer.y}`);
+            const boyDx = (pointer.x + 50) - this.boy.x;
+            const boyDy = pointer.y - this.boy.y;
 
-            this.time.delayedCall(200, () => {
-                const boyDx = (pointer.x + 50) - this.boy.x;
-                const boyDy = pointer.y - this.boy.y;
-
-                this.setDirectionTexture(this.boy, boyDx, boyDy, 'boy');
-                this.moveTo(this.boy, pointer.x + 50, pointer.y, 120);
-            });
+            this.setDirectionTexture(this.boy, boyDx, boyDy, 'boy');
+            this.moveTo(this.boy, pointer.x + 50, pointer.y, 200);
         });
     }
-
-    
-
-
 
     update(time, delta) {
         if (this.girl && this.zombie && this.boss) {
             // Move the enemy a few pixels per frame toward the girl
-            const speed = 100; // Adjust to make it faster/slower
+            const speed = 75; 
             this.physics.moveToObject(this.zombie, this.girl, speed);
+            this.physics.moveToObject(this.boss, this.girl, speed);
 
             const dx = this.girl.x - this.zombie.x;
             if (dx > 0) {
@@ -214,10 +210,28 @@ export class Game extends Scene
                 camper.body.setVelocity(0,0);
             }
         }
+
+        const distanceToSpawn = Phaser.Math.Distance.Between(
+                this.girl.x, this.girl.y,
+                this.spawnX, this.spawnY
+        );
+
+        if (this.followers.length === this.campersTotal && distanceToSpawn < 30) {
+            this.hasWon = true;
+            this.handleWin();
+        }
     }
 
-    changeScene ()
-    {
-        this.scene.start('GameOver');
+    handleWin() {
+        this.girl.body.setVelocity(0, 0);
+        for (let camper of this.followers) {
+            camper.body.setVelocity(0, 0);
+        }
+
+        this.changeScene('win')
     }
+
+    changeScene(result = 'lose') {
+            this.scene.start('GameOver', { result });
+        }
 }
