@@ -78,13 +78,16 @@ export class Game extends Scene
         this.campers = this.physics.add.group();
 
         this.girl = this.physics.add.sprite(spawnX, spawnY, 'girl-south').setInteractive();
-        this.girl.body.setSize(30,50);
+        this.girl.body.setSize(65,100);
 
         this.boy = this.physics.add.sprite(spawnX + 50, spawnY, 'boy-south').setScale(0.85);
         this.boy.body.setSize(20,40);
 
-        this.zombie = this.physics.add.sprite(randomSpawnX, randomSpawnY, 'zombie');
+        this.zombie = this.physics.add.sprite(randomSpawnX, randomSpawnY, 'zombie-east');
         this.zombie.body.setSize(20,40);
+
+        this.boss = this.physics.add.sprite(randomSpawnX, randomSpawnY, 'boss-east').setScale(2);
+        this.boss.body.setSize(20,40);
 
         this.physics.add.overlap(this.girl, this.zombie, () => {
             this.changeScene();
@@ -165,10 +168,32 @@ export class Game extends Scene
 
 
     update(time, delta) {
-        if (this.girl && this.zombie) {
+        if (this.girl && this.zombie && this.boss) {
             // Move the enemy a few pixels per frame toward the girl
-            const speed = 75; // Adjust to make it faster/slower
+            const speed = 100; // Adjust to make it faster/slower
             this.physics.moveToObject(this.zombie, this.girl, speed);
+
+            const dx = this.girl.x - this.zombie.x;
+            if (dx > 0) {
+                this.zombie.setTexture('zombie-east');
+            } else {
+                this.zombie.setTexture('zombie-west');
+            }
+
+        }
+
+          if (this.girl && this.boss) {
+            // Move the enemy a few pixels per frame toward the girl
+            const speed = 100; // Adjust to make it faster/slower
+            this.physics.moveToObject(this.boss, this.girl, speed);
+
+            const dx = this.girl.x - this.boss.x;
+            if (dx > 0) {
+                this.boss.setTexture('boss-east');
+            } else {
+                this.boss.setTexture('boss-west');
+            }
+
         }
         const followSpeed = 140;
         const minDistance = 25;
