@@ -30,6 +30,7 @@ export class GameOver extends Phaser.Scene {
         }).setOrigin(0.5).setInteractive();
 
         restartBtn.on('pointerdown', () => {
+            this.sound.stopAll();
             this.scene.start('MainMenu'); // or 'Game' if you want to restart directly
         });
     }
