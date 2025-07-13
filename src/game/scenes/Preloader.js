@@ -31,6 +31,12 @@ export class Preloader extends Scene
     {
         //  Load the assets for the game - Replace with your own assets
         this.load.setPath('assets');
+        //Audio
+        this.load.audio('backgroundMusic', [
+            'horror-music.mp3',
+        ]);
+
+        //Images
         this.load.image('tree', 'tree.PNG');
         this.load.image('tent', 'tent-start.PNG');
         this.load.image('girl-south', 'girl-front.PNG');

@@ -17,6 +17,8 @@ export class MainMenu extends Scene
     create ()
     {
         this.add.image(512, 384, 'tent');
+        let music = this.sound.add('backgroundMusic');
+        music.play();
 
         this.add.text(512, 460, 'Summer Camp Survival', {
             fontFamily: 'Arial Black', fontSize: 38, color: '#ffffff',
