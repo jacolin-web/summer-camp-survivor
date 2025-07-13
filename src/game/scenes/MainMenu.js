@@ -23,6 +23,19 @@ export class MainMenu extends Scene
             stroke: '#000000', strokeThickness: 8,
             align: 'left'
         }).setDepth(100).setOrigin(0.5);
+
+        const startButton = this.add.text(this.scale.width / 2, 400, 'Start Game', {
+            fontSize: '32px',
+            color: '#ffffff',
+            backgroundColor: '#000000',
+            padding: { x: 20, y: 10 }
+        })
+        .setOrigin(0.5)
+        .setInteractive({ useHandCursor: true });
+
+        startButton.on('pointerdown', () => {
+            this.scene.start('Game');
+        });
         
         EventBus.emit('current-scene-ready', this);
     }

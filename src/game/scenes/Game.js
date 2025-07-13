@@ -69,11 +69,15 @@ export class Game extends Scene
         this.girl = this.physics.add.sprite(spawnX, spawnY, 'girl-south').setInteractive();
         this.girl.body.setSize(65,100);
 
-        this.boy = this.physics.add.sprite(spawnX + 50, spawnY, 'boy').setScale(0.85);
+        this.boy = this.physics.add.sprite(spawnX + 50, spawnY, 'boy-south').setScale(0.85);
         this.boy.body.setSize(65,100);
 
         this.zombie = this.physics.add.sprite(randomSpawnX, randomSpawnY, 'zombie');
         this.zombie.body.setSize(65,100);
+
+        this.physics.add.overlap(this.girl, this.zombie, () => {
+            this.changeScene();
+        });
 
         this.camper1 = this.physics.add.sprite(300, 300, 'egg-south').setScale(0.85);
         this.camper1.body.setSize(65,100);
@@ -113,7 +117,7 @@ export class Game extends Scene
             if (valid) {
                 placedTreePositions.push({ x, y });
                 const tree = this.trees.create(x, y, 'tree').setScale(1.5).refreshBody();
-                tree.body.setSize(90, 100);
+                tree.body.setSize(45, 50);
             }
         }
 
@@ -140,6 +144,10 @@ export class Game extends Scene
             });
         });
     }
+
+    
+
+
 
     update(time, delta) {
         if (this.girl && this.zombie) {
