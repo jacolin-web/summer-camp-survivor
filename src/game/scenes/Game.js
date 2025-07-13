@@ -78,13 +78,13 @@ export class Game extends Scene
         this.campers = this.physics.add.group();
 
         this.girl = this.physics.add.sprite(spawnX, spawnY, 'girl-south').setInteractive();
-        this.girl.body.setSize(65,100);
+        this.girl.body.setSize(30,50);
 
         this.boy = this.physics.add.sprite(spawnX + 50, spawnY, 'boy-south').setScale(0.85);
-        this.boy.body.setSize(65,100);
+        this.boy.body.setSize(20,40);
 
         this.zombie = this.physics.add.sprite(randomSpawnX, randomSpawnY, 'zombie');
-        this.zombie.body.setSize(65,100);
+        this.zombie.body.setSize(20,40);
 
         this.physics.add.overlap(this.girl, this.zombie, () => {
             this.changeScene();
@@ -102,14 +102,14 @@ export class Game extends Scene
         
         this.trees = this.physics.add.staticGroup();
         const treeCount = Phaser.Math.Between(10, 13);
-        const minDistanceBetweenTrees = 120;
+        const minDistanceBetweenTrees = 200;
         const placedTreePositions = [];
 
         for (let i = 0; i < treeCount; i++) {
             let x, y;
             let valid = false;
             let attempts = 0;
-            const maxAttempts = 100;
+            const maxAttempts = 150;
 
             while (!valid && attempts < maxAttempts) {
                 x = Phaser.Math.Between(100, this.scale.width - 100) - 50;
@@ -167,7 +167,7 @@ export class Game extends Scene
     update(time, delta) {
         if (this.girl && this.zombie) {
             // Move the enemy a few pixels per frame toward the girl
-            const speed = 100; // Adjust to make it faster/slower
+            const speed = 75; // Adjust to make it faster/slower
             this.physics.moveToObject(this.zombie, this.girl, speed);
         }
         const followSpeed = 140;
