@@ -20,7 +20,7 @@ export class GameOver extends Scene
             align: 'center'
         }).setOrigin(0.5).setDepth(100);
 
-        const startButton = this.add.text(this.scale.width / 2, 450, 'Restart Game', {
+        const restartButton = this.add.text(this.scale.width / 2, 450, 'Restart Game', {
             fontSize: '32px',
             color: '#ffffff',
             backgroundColor: '#000000',
@@ -29,7 +29,7 @@ export class GameOver extends Scene
         .setOrigin(0.5)
         .setInteractive({ useHandCursor: true });
 
-        startButton.on('pointerdown', () => {
+        restartButton.on('pointerdown', () => {
             this.scene.start('Game');
         });
 
