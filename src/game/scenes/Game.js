@@ -11,7 +11,25 @@ export class Game extends Scene
 
      preloader(){
         this.load.image('tent', 'tent-start.PNG');
+
     }
+
+    setDirectionTexture(sprite, dx, dy, baseName) {
+    if (Math.abs(dx) > Math.abs(dy)) {
+        if (dx > 0) {
+            sprite.setTexture(`${baseName}-east`);
+        } else {
+            sprite.setTexture(`${baseName}-west`);
+        }
+    } else {
+        if (dy > 0) {
+            sprite.setTexture(`${baseName}-south`);
+        } else {
+            sprite.setTexture(`${baseName}-north`);
+        }
+    }
+}
+
 
     moveTo(sprite, targetX, targetY, speed) {
         const angle = Phaser.Math.Angle.Between(sprite.x, sprite.y, targetX, targetY);
@@ -46,8 +64,9 @@ export class Game extends Scene
 
         const randomSpawnX = Phaser.Math.Between(64, this.scale.width - 64);
         const randomSpawnY = Phaser.Math.Between(64, this.scale.height - 64);
+        
 
-        this.girl = this.physics.add.sprite(spawnX, spawnY, 'girl').setInteractive();
+        this.girl = this.physics.add.sprite(spawnX, spawnY, 'girl-south').setInteractive();
         this.girl.body.setSize(65,100);
 
         this.boy = this.physics.add.sprite(spawnX + 50, spawnY, 'boy').setScale(0.85);
@@ -97,12 +116,20 @@ export class Game extends Scene
 
 
         this.input.on('pointerdown', (pointer) => {
+            const dx = pointer.x - this.girl.x;
+            const dy = pointer.y - this.girl.y;
+
+            this.setDirectionTexture(this.girl, dx, dy, 'girl');
             this.moveTo(this.girl, pointer.x, pointer.y, 200);
 
-            console.log(`current position x: ${pointer.x}`)
-            console.log(`current position y: ${pointer.y}`)
+            console.log(`current position x: ${pointer.x}`);
+            console.log(`current position y: ${pointer.y}`);
 
             this.time.delayedCall(200, () => {
+                const boyDx = (pointer.x + 50) - this.boy.x;
+                const boyDy = pointer.y - this.boy.y;
+
+                this.setDirectionTexture(this.boy, boyDx, boyDy, 'boy');
                 this.moveTo(this.boy, pointer.x + 50, pointer.y, 120);
             });
         });

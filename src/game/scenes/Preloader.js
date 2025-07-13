@@ -33,9 +33,15 @@ export class Preloader extends Scene
         this.load.setPath('assets');
         this.load.image('tree', 'tree.PNG');
         this.load.image('tent', 'tent-start.PNG');
-        this.load.image('girl', 'girl-front.PNG');
+        this.load.image('girl-south', 'girl-front.PNG');
+        this.load.image('girl-north', 'girl-back.PNG');
+        this.load.image('girl-east', 'girl-right.png');
+        this.load.image('girl-west', 'girl-left.PNG');
         this.load.image('zombie', 'zombie.PNG');
-        this.load.image('boy', 'boy-front.PNG');
+        this.load.image('boy-south', 'boy-front.PNG');
+        this.load.image('boy-north', 'boy-back.PNG');
+        this.load.image('boy-east', 'boy-right.png');
+        this.load.image('boy-west', 'boy-left.PNG');
     }
 
     create ()
