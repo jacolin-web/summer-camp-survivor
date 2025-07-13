@@ -33,6 +33,17 @@ export class MainMenu extends Scene
         .setOrigin(0.5)
         .setInteractive({ useHandCursor: true });
 
+        this.add.text(this.scale.width / 2, 525, 
+            ['Click to walk around camp and pick up other campers.',
+            'Bring them back to the tent!'], {
+            fontSize: '20px',
+            color: '#ffffff',
+            stroke: '#000000', 
+            strokeThickness: 5,
+            padding: { x: 20, y: 10 }
+        })
+        .setOrigin(0.5)
+
         startButton.on('pointerdown', () => {
             this.scene.start('Game');
         });
