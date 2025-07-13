@@ -54,6 +54,14 @@ export class Game extends Scene
         });
     }
 
+    collectCamper(girl, camper){
+        if (!this.followers.includes(camper)){
+            this.campers.remove(camper);
+            this.followers.push(camper);
+            camper.setTint(0x88ff88);
+        }
+    }
+
     create() {
         this.add.image(512, 384, 'tent');
 
@@ -65,6 +73,9 @@ export class Game extends Scene
         const randomSpawnX = Phaser.Math.Between(64, this.scale.width - 64);
         const randomSpawnY = Phaser.Math.Between(64, this.scale.height - 64);
         
+
+        this.followers = [];
+        this.campers = this.physics.add.group();
 
         this.girl = this.physics.add.sprite(spawnX, spawnY, 'girl-south').setInteractive();
         this.girl.body.setSize(65,100);
@@ -81,9 +92,13 @@ export class Game extends Scene
 
         this.camper1 = this.physics.add.sprite(300, 300, 'egg-south').setScale(0.85);
         this.camper1.body.setSize(65,100);
+        this.campers.add(this.camper1);
 
         this.camper2 = this.physics.add.sprite(300, 350, 'boohoo-south').setScale(0.85);
         this.camper2.body.setSize(65,100);
+        this.campers.add(this.camper2);
+
+        this.physics.add.overlap(this.girl, this.campers, this.collectCamper, null, this);
         
         this.trees = this.physics.add.staticGroup();
         const treeCount = Phaser.Math.Between(10, 13);
@@ -154,6 +169,25 @@ export class Game extends Scene
             // Move the enemy a few pixels per frame toward the girl
             const speed = 100; // Adjust to make it faster/slower
             this.physics.moveToObject(this.zombie, this.girl, speed);
+        }
+        const followSpeed = 140;
+        const minDistance = 25;
+
+        for (let i = 0; i < this.followers.length; i++){
+            const leader = i === 0 ? this.girl : this.followers[i - 1];
+            const camper = this.followers[i];
+
+            const dx = leader.x - camper.x;
+            const dy = leader.y - camper.y;
+            const distance = Phaser.Math.Distance.Between(camper.x, camper.y, leader.x, leader.y);
+
+            this.setDirectionTexture(camper, dx, dy, camper.texture.key.split('-')[0]);
+
+            if (distance > minDistance){
+                this.physics.moveToObject(camper, leader, followSpeed);
+            } else{
+                camper.body.setVelocity(0,0);
+            }
         }
     }
 
