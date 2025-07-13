@@ -42,6 +42,19 @@ export class Preloader extends Scene
         this.load.image('boy-north', 'boy-back.PNG');
         this.load.image('boy-east', 'boy-right.png');
         this.load.image('boy-west', 'boy-left.PNG');
+
+        this.load.image('egg-south', 'egg-front.png');
+        this.load.image('egg-north', 'back.PNG');
+        this.load.image('egg-east', 'egg-right.png');
+        this.load.image('egg-west', 'egg-left.png');
+
+
+        this.load.image('boohoo-south', 'boohoo-front.png');
+        this.load.image('boohoo-north', 'back.PNG');
+        this.load.image('boohoo-east', 'boohoo-right.png');
+        this.load.image('boohoo-west', 'boohoo-left.png');
+
+
     }
 
     create ()
